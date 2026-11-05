@@ -1,0 +1,803 @@
+### 2026-11-05 10:37:03 (elapsed 1.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    6.0 do_wait                  agent-leak-app-
+  64386   64386 SN+   5.0 do_select                agent-leak-app-
+
+### 2026-11-05 10:37:08 (elapsed 6.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    1.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  1.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  2.3 do_select                agent-leak-app-
+  64386   64504 SNl+  0.3 do_select                agent-leak-app-
+
+### 2026-11-05 10:37:13 (elapsed 11.6s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.5 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.5 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.1 do_select                agent-leak-app-
+  64386   64504 SNl+  0.4 do_select                agent-leak-app-
+
+### 2026-11-05 10:37:19 (elapsed 16.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.3 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.3 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.2 do_select                agent-leak-app-
+  64386   64504 SNl+  0.7 do_select                agent-leak-app-
+
+### 2026-11-05 10:37:24 (elapsed 22.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.2 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.2 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.3 do_select                agent-leak-app-
+  64386   64504 SNl+  1.0 do_select                agent-leak-app-
+
+### 2026-11-05 10:37:29 (elapsed 27.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.2 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.2 futex_wait               agent-leak-app-
+  64386   64503 RNl+  1.2 -                        agent-leak-app-
+  64386   64504 SNl+  1.0 do_select                agent-leak-app-
+
+### 2026-11-05 10:37:34 (elapsed 32.6s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.1 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.1 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.2 do_select                agent-leak-app-
+  64386   64504 SNl+  1.1 do_select                agent-leak-app-
+
+### 2026-11-05 10:37:40 (elapsed 37.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.1 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.1 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.2 do_select                agent-leak-app-
+  64386   64504 SNl+  1.2 do_select                agent-leak-app-
+
+### 2026-11-05 10:37:45 (elapsed 43.1s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.1 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.1 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.2 do_select                agent-leak-app-
+  64386   64504 SNl+  1.1 do_select                agent-leak-app-
+
+### 2026-11-05 10:37:50 (elapsed 48.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.1 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.1 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.2 do_select                agent-leak-app-
+  64386   64504 SNl+  1.1 do_select                agent-leak-app-
+
+### 2026-11-05 10:37:55 (elapsed 53.6s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.1 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.1 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.2 do_select                agent-leak-app-
+  64386   64504 SNl+  1.0 do_select                agent-leak-app-
+
+### 2026-11-05 10:38:01 (elapsed 58.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.1 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.1 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.2 do_select                agent-leak-app-
+  64386   64504 SNl+  1.0 do_select                agent-leak-app-
+
+### 2026-11-05 10:38:06 (elapsed 64.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.2 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:38:11 (elapsed 69.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.2 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:38:16 (elapsed 74.6s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.1 do_select                agent-leak-app-
+  64386   64504 RNl+  0.8 -                        agent-leak-app-
+
+### 2026-11-05 10:38:22 (elapsed 79.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.1 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:38:27 (elapsed 85.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.2 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:38:32 (elapsed 90.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.1 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:38:37 (elapsed 95.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.1 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:38:43 (elapsed 100.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.1 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:38:48 (elapsed 106.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.2 do_select                agent-leak-app-
+  64386   64504 SNl+  1.0 do_select                agent-leak-app-
+
+### 2026-11-05 10:38:53 (elapsed 111.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.1 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:38:58 (elapsed 116.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.1 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:39:04 (elapsed 121.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.1 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:39:09 (elapsed 127.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.2 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:39:14 (elapsed 132.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.1 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:39:19 (elapsed 137.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.1 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:39:25 (elapsed 142.7s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.1 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:39:30 (elapsed 148.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:39:35 (elapsed 153.2s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:39:40 (elapsed 158.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:39:46 (elapsed 163.7s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:39:51 (elapsed 169.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:39:56 (elapsed 174.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:40:01 (elapsed 179.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:40:07 (elapsed 184.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:40:12 (elapsed 190.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:40:17 (elapsed 195.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:40:22 (elapsed 200.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:40:28 (elapsed 205.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:40:33 (elapsed 211.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:40:38 (elapsed 216.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:40:43 (elapsed 221.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:40:49 (elapsed 226.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:40:54 (elapsed 232.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:40:59 (elapsed 237.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:41:04 (elapsed 242.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:41:10 (elapsed 247.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:41:15 (elapsed 253.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:41:20 (elapsed 258.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:41:25 (elapsed 263.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:41:31 (elapsed 268.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:41:36 (elapsed 274.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:41:41 (elapsed 279.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:41:46 (elapsed 284.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:41:52 (elapsed 289.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:41:57 (elapsed 295.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:42:02 (elapsed 300.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:42:07 (elapsed 305.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:42:13 (elapsed 310.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:42:18 (elapsed 316.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:42:23 (elapsed 321.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:42:28 (elapsed 326.6s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:42:34 (elapsed 331.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:42:39 (elapsed 337.1s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:42:44 (elapsed 342.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:42:49 (elapsed 347.6s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:42:55 (elapsed 352.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:43:00 (elapsed 358.1s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:43:05 (elapsed 363.4s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:43:10 (elapsed 368.6s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:43:16 (elapsed 373.9s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:43:21 (elapsed 379.1s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:43:26 (elapsed 384.4s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:43:31 (elapsed 389.7s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:43:37 (elapsed 394.9s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:43:42 (elapsed 400.1s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:43:47 (elapsed 405.4s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:43:52 (elapsed 410.7s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:43:58 (elapsed 415.9s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.8 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:44:03 (elapsed 421.2s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:44:08 (elapsed 426.4s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:44:13 (elapsed 431.7s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.8 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:44:19 (elapsed 437.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:44:24 (elapsed 442.2s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:44:29 (elapsed 447.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:44:34 (elapsed 452.7s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:44:40 (elapsed 458.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:44:45 (elapsed 463.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:44:50 (elapsed 468.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:44:55 (elapsed 473.7s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:45:01 (elapsed 479.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.8 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:45:06 (elapsed 484.2s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.8 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:45:11 (elapsed 489.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.8 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:45:16 (elapsed 494.7s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.8 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:45:22 (elapsed 500.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:45:27 (elapsed 505.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:45:32 (elapsed 510.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:45:38 (elapsed 515.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:45:43 (elapsed 521.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:45:48 (elapsed 526.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:45:53 (elapsed 531.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:45:59 (elapsed 536.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:46:04 (elapsed 542.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.8 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:46:09 (elapsed 547.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.8 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:46:14 (elapsed 552.6s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.8 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:46:20 (elapsed 557.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:46:25 (elapsed 563.2s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.8 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:46:30 (elapsed 568.4s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:46:35 (elapsed 573.7s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 RNl+  0.9 -                        agent-leak-app-
+
+### 2026-11-05 10:46:41 (elapsed 578.9s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:46:46 (elapsed 584.2s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.9 do_select                agent-leak-app-
+
+### 2026-11-05 10:46:51 (elapsed 589.4s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:46:56 (elapsed 594.7s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:47:02 (elapsed 599.9s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  64380   64380 S+    0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8 do_select                agent-leak-app-
+

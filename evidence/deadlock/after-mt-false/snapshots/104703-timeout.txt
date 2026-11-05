@@ -1,0 +1,51 @@
+### [timeout] 2026-11-05 10:47:03
+
+$ ps -ef | grep agent-leak-app | grep -v grep
+agent      64380   64360  0 10:37 pts/0    00:00:00 /workspace/agent-leak-app-x86
+agent      64386   64380  1 10:37 pts/0    00:00:10 /workspace/agent-leak-app-x86
+
+$ ps -L -o pid,lwp,stat,pcpu,pmem,wchan:24,comm -p 64380,64386
+    PID     LWP STAT %CPU %MEM WCHAN                    COMMAND
+  64380   64380 S+    0.0  0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0  1.0 futex_wait               agent-leak-app-
+  64386   64503 SNl+  0.9  1.0 do_select                agent-leak-app-
+  64386   64504 SNl+  0.8  1.0 do_select                agent-leak-app-
+
+$ top -H -b -n 1 -p 64380,64386
+top - 10:47:03 up  1:46,  0 users,  load average: 0.01, 0.02, 0.00
+Threads:   4 total,   0 running,   4 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  16064.8 total,  15392.0 free,    452.4 used,    220.3 buff/cache
+MiB Swap:  17088.8 total,  17088.8 free,      0.0 used.  15333.4 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+  64380 agent     20   0    3000   1948   1696 S   0.0   0.0   0:00.06 agent-l+
+  64386 agent     30  10  302268 165604   3244 S   0.0   1.0   0:00.06 agent-l+
+  64503 agent     30  10  302268 165604   3244 S   0.0   1.0   0:05.42 agent-l+
+  64504 agent     30  10  302268 165604   3244 S   0.0   1.0   0:05.31 agent-l+
+
+$ pstree -p 64380
+agent-leak-app-(64380)---agent-leak-app-(64386)-+-{agent-leak-app-}(64503)
+                                                `-{agent-leak-app-}(64504)
+
+$ tail -n 20 app.log
+2026-11-05 10:46:41,395 [INFO] [MemoryWorker] Current Heap: 425MB
+2026-11-05 10:46:42,134 [INFO] [CpuWorker] Current Load: 6.98%
+2026-11-05 10:46:44,449 [INFO] [MemoryWorker] Current Heap: 450MB
+2026-11-05 10:46:45,252 [INFO] [CpuWorker] Current Load: 6.41%
+2026-11-05 10:46:47,366 [INFO] [CpuWorker] Cooldown complete (5.00%). Resuming load increase...
+2026-11-05 10:46:47,504 [INFO] [MemoryWorker] Current Heap: 475MB
+2026-11-05 10:46:48,372 [INFO] [CpuWorker] Current Load: 5.00%
+2026-11-05 10:46:50,541 [INFO] [MemoryWorker] Current Heap: 500MB
+2026-11-05 10:46:51,491 [INFO] [CpuWorker] Current Load: 11.40%
+2026-11-05 10:46:53,595 [INFO] [MemoryWorker] Current Heap: 525MB
+2026-11-05 10:46:53,595 [WARNING] [MemoryWorker] Memory Usage Reached Limit (525MB). Starting cleanup...
+2026-11-05 10:46:53,602 [INFO] [System] Memory Cache Flushed. Process Stabilized.
+
+>>> [SYSTEM] MEMORY RECOVERED (Cache Cleared) <<<
+
+2026-11-05 10:46:54,610 [INFO] [CpuWorker] Current Load: 13.50%
+2026-11-05 10:46:57,732 [INFO] [CpuWorker] Current Load: 16.19%
+2026-11-05 10:46:58,632 [INFO] [MemoryWorker] Current Heap: 25MB
+2026-11-05 10:47:00,853 [INFO] [CpuWorker] Current Load: 24.94%
+2026-11-05 10:47:01,650 [INFO] [MemoryWorker] Current Heap: 50MB

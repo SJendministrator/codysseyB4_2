@@ -1,0 +1,28 @@
+case        : deadlock
+label       : after-mt-false
+settings    : MEMORY_LIMIT=512MB CPU_MAX_OCCUPY=50% MULTI_THREAD_ENABLE=false
+start       : 2026-11-05 10:37:02
+end         : 2026-11-05 10:47:03
+survival_s  : 601.2
+end_reason  : SURVIVED (still running at timeout 600s, stopped by monitor)
+peak_rss_mb : 520.3
+peak_cpu_pct: 8.6   (순간값, 코어 6개 기준 최대 600%)
+
+---- key log lines ----
+
+---- last 15 lines of app.log ----
+2026-11-05 10:46:47,504 [INFO] [MemoryWorker] Current Heap: 475MB
+2026-11-05 10:46:48,372 [INFO] [CpuWorker] Current Load: 5.00%
+2026-11-05 10:46:50,541 [INFO] [MemoryWorker] Current Heap: 500MB
+2026-11-05 10:46:51,491 [INFO] [CpuWorker] Current Load: 11.40%
+2026-11-05 10:46:53,595 [INFO] [MemoryWorker] Current Heap: 525MB
+2026-11-05 10:46:53,595 [WARNING] [MemoryWorker] Memory Usage Reached Limit (525MB). Starting cleanup...
+2026-11-05 10:46:53,602 [INFO] [System] Memory Cache Flushed. Process Stabilized.
+
+>>> [SYSTEM] MEMORY RECOVERED (Cache Cleared) <<<
+
+2026-11-05 10:46:54,610 [INFO] [CpuWorker] Current Load: 13.50%
+2026-11-05 10:46:57,732 [INFO] [CpuWorker] Current Load: 16.19%
+2026-11-05 10:46:58,632 [INFO] [MemoryWorker] Current Heap: 25MB
+2026-11-05 10:47:00,853 [INFO] [CpuWorker] Current Load: 24.94%
+2026-11-05 10:47:01,650 [INFO] [MemoryWorker] Current Heap: 50MB
