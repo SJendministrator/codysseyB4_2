@@ -1,4 +1,6 @@
 agent_home/
-*.log
+agent-leak-app*
+*.zip
+
 __pycache__/
 .DS_Store

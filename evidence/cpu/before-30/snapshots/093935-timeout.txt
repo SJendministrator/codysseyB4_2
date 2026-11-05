@@ -1,0 +1,51 @@
+### [timeout] 2026-11-05 09:39:35
+
+$ ps -ef | grep agent-leak-app | grep -v grep
+agent       7691    7671  0 09:24 pts/0    00:00:00 /workspace/agent-leak-app-x86
+agent       7697    7691  1 09:24 pts/0    00:00:13 /workspace/agent-leak-app-x86
+
+$ ps -L -o pid,lwp,stat,pcpu,pmem,wchan:24,comm -p 7691,7697
+    PID     LWP STAT %CPU %MEM WCHAN                    COMMAND
+   7691    7691 S+    0.0  0.0 do_wait                  agent-leak-app-
+   7697    7697 SNl+  0.0  2.2 futex_wait               agent-leak-app-
+   7697    7814 SNl+  0.8  2.2 do_select                agent-leak-app-
+   7697    7815 SNl+  0.5  2.2 do_select                agent-leak-app-
+
+$ top -H -b -n 1 -p 7691,7697
+top - 09:39:36 up 38 min,  0 users,  load average: 0.04, 0.07, 0.02
+Threads:   4 total,   0 running,   4 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  16064.8 total,  15255.3 free,    669.6 used,    139.9 buff/cache
+MiB Swap:  17088.8 total,  17088.8 free,      0.0 used.  15156.5 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+   7691 agent     20   0    3000   1956   1692 S   0.0   0.0   0:00.10 agent-l+
+   7697 agent     30  10  564412 370396   3212 S   0.0   2.3   0:00.05 agent-l+
+   7814 agent     30  10  564412 370396   3212 S   0.0   2.3   0:08.06 agent-l+
+   7815 agent     30  10  564412 370396   3212 S   0.0   2.3   0:05.26 agent-l+
+
+$ pstree -p 7691
+agent-leak-app-(7691)---agent-leak-app-(7697)-+-{agent-leak-app-}(7814)
+                                              `-{agent-leak-app-}(7815)
+
+$ tail -n 20 app.log
+2026-11-05 09:39:08,243 [INFO] [MemoryWorker] Current Heap: 125MB
+2026-11-05 09:39:09,631 [INFO] [CpuWorker] Current Load: 16.36%
+2026-11-05 09:39:11,262 [INFO] [MemoryWorker] Current Heap: 150MB
+2026-11-05 09:39:12,750 [INFO] [CpuWorker] Current Load: 13.08%
+2026-11-05 09:39:14,316 [INFO] [MemoryWorker] Current Heap: 175MB
+2026-11-05 09:39:15,871 [INFO] [CpuWorker] Current Load: 13.02%
+2026-11-05 09:39:17,369 [INFO] [MemoryWorker] Current Heap: 200MB
+2026-11-05 09:39:18,990 [INFO] [CpuWorker] Current Load: 6.76%
+2026-11-05 09:39:20,423 [INFO] [MemoryWorker] Current Heap: 225MB
+2026-11-05 09:39:21,104 [INFO] [CpuWorker] Cooldown complete (5.00%). Resuming load increase...
+2026-11-05 09:39:22,111 [INFO] [CpuWorker] Current Load: 5.00%
+2026-11-05 09:39:23,479 [INFO] [MemoryWorker] Current Heap: 250MB
+2026-11-05 09:39:25,232 [INFO] [CpuWorker] Current Load: 9.50%
+2026-11-05 09:39:26,536 [INFO] [MemoryWorker] Current Heap: 275MB
+2026-11-05 09:39:28,352 [INFO] [CpuWorker] Current Load: 14.45%
+2026-11-05 09:39:29,590 [INFO] [MemoryWorker] Current Heap: 300MB
+2026-11-05 09:39:31,473 [INFO] [CpuWorker] Current Load: 23.08%
+2026-11-05 09:39:32,644 [INFO] [MemoryWorker] Current Heap: 325MB
+2026-11-05 09:39:34,594 [INFO] [CpuWorker] Current Load: 28.90%
+2026-11-05 09:39:35,700 [INFO] [MemoryWorker] Current Heap: 350MB

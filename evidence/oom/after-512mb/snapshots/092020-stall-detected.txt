@@ -1,0 +1,51 @@
+### [stall-detected] 2026-11-05 09:20:20
+
+$ ps -ef | grep agent-leak-app | grep -v grep
+agent       2099    2079  0 09:19 pts/0    00:00:00 /workspace/agent-leak-app-x86
+agent       2105    2099  0 09:19 pts/0    00:00:00 /workspace/agent-leak-app-x86
+
+$ ps -L -o pid,lwp,stat,pcpu,pmem,wchan:24,comm -p 2099,2105
+    PID     LWP STAT %CPU %MEM WCHAN                    COMMAND
+   2099    2099 S+    0.2  0.0 do_wait                  agent-leak-app-
+   2105    2105 SNl+  0.1  0.1 futex_wait               agent-leak-app-
+   2105    2452 SNl+  0.0  0.1 futex_wait               agent-leak-app-
+   2105    2453 SNl+  0.0  0.1 futex_wait               agent-leak-app-
+
+$ top -H -b -n 1 -p 2099,2105
+top - 09:20:20 up 19 min,  0 users,  load average: 0.06, 0.02, 0.00
+Threads:   4 total,   0 running,   4 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  16064.8 total,  15568.1 free,    318.0 used,    178.6 buff/cache
+MiB Swap:  17088.8 total,  17088.8 free,      0.0 used.  15488.6 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+   2099 agent     20   0    3000   2036   1772 S   0.0   0.0   0:00.10 agent-l+
+   2105 agent     30  10  170172  18032   9436 S   0.0   0.1   0:00.05 agent-l+
+   2452 agent     30  10  170172  18032   9436 S   0.0   0.1   0:00.00 agent-l+
+   2453 agent     30  10  170172  18032   9436 S   0.0   0.1   0:00.00 agent-l+
+
+$ pstree -p 2099
+agent-leak-app-(2099)---agent-leak-app-(2105)-+-{agent-leak-app-}(2452)
+                                              `-{agent-leak-app-}(2453)
+
+$ tail -n 20 app.log
+ [ MEMORY ] Limit: 512MB 		[ OK ]
+ [ CPU    ] Limit: 50%  		[ OK ]
+ [ THREAD ] Concurrency: True 		[ WARNING ]
+--------------------------------------------------
+ >>> SYSTEM WARNING: POTENTIAL DEADLOCK IN CONCURRENT MODE.
+==================================================
+
+2026-11-05 09:19:42,405 [WARNING] [AgentWorker] Initializing concurrent transaction processors...
+2026-11-05 09:19:42,406 [WARNING] [System] CAUTION: Strict resource locking is enabled.
+2026-11-05 09:19:47,433 [INFO] [Worker-Thread-1] Process Started. Attempting to lock [Shared_Memory_A]...
+2026-11-05 09:19:47,433 [INFO] [AgentWorker][Worker-Thread-1] LOCK ACQUIRED: [Shared_Memory_A]. (Holding...)
+2026-11-05 09:19:47,434 [INFO] [AgentWorker][Worker-Thread-2] Process Started. Attempting to lock [Socket_Pool_B]...
+2026-11-05 09:19:47,434 [INFO] [AgentWorker][Worker-Thread-1] Processing critical data in Memory A...
+2026-11-05 09:19:47,434 [INFO] [AgentWorker] Waiting for worker threads to complete transactions...
+2026-11-05 09:19:47,435 [INFO] [AgentWorker][Worker-Thread-2] LOCK ACQUIRED: [Socket_Pool_B]. (Holding...)
+2026-11-05 09:19:47,435 [INFO] [AgentWorker][Worker-Thread-2] Establishing network connections in Pool B...
+2026-11-05 09:19:49,447 [INFO] [AgentWorker][Worker-Thread-1] Need resource [Socket_Pool_B] to finish job.
+2026-11-05 09:19:49,447 [INFO] [AgentWorker][Worker-Thread-1] WAITING for [Socket_Pool_B]... (Status: BLOCKED)
+2026-11-05 09:19:49,447 [INFO] [AgentWorker][Worker-Thread-2] Need resource [Shared_Memory_A] to write logs.
+2026-11-05 09:19:49,448 [INFO] [AgentWorker][Worker-Thread-2] WAITING for [Shared_Memory_A]... (Status: BLOCKED)

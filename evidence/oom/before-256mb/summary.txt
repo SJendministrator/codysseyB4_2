@@ -1,0 +1,30 @@
+case        : oom
+label       : before-256mb
+settings    : MEMORY_LIMIT=256MB CPU_MAX_OCCUPY=50% MULTI_THREAD_ENABLE=true
+start       : 2026-11-05 09:10:36
+end         : 2026-11-05 09:11:09
+survival_s  : 33.6
+end_reason  : EXITED by itself (exit code 137) = signal 9 (KILL)
+peak_rss_mb : 269.8
+peak_cpu_pct: 4.7   (순간값, 코어 6개 기준 최대 600%)
+
+---- key log lines ----
+41:2026-11-05 09:11:08,957 [CRITICAL] [MemoryGuard] Memory limit exceeded (275MB >= 256MB) / (Recommend Over 256MB)
+42:2026-11-05 09:11:08,957 [CRITICAL] [MemoryGuard] Self-terminating process 285 to prevent system instability.
+
+---- last 15 lines of app.log ----
+==================================================
+
+2026-11-05 09:10:38,439 [INFO] [MemoryWorker] Current Heap: 25MB
+2026-11-05 09:10:41,496 [INFO] [MemoryWorker] Current Heap: 50MB
+2026-11-05 09:10:44,550 [INFO] [MemoryWorker] Current Heap: 75MB
+2026-11-05 09:10:47,603 [INFO] [MemoryWorker] Current Heap: 100MB
+2026-11-05 09:10:50,658 [INFO] [MemoryWorker] Current Heap: 125MB
+2026-11-05 09:10:53,712 [INFO] [MemoryWorker] Current Heap: 150MB
+2026-11-05 09:10:56,766 [INFO] [MemoryWorker] Current Heap: 175MB
+2026-11-05 09:10:59,821 [INFO] [MemoryWorker] Current Heap: 200MB
+2026-11-05 09:11:02,877 [INFO] [MemoryWorker] Current Heap: 225MB
+2026-11-05 09:11:05,932 [INFO] [MemoryWorker] Current Heap: 250MB
+2026-11-05 09:11:08,956 [INFO] [MemoryWorker] Current Heap: 275MB
+2026-11-05 09:11:08,957 [CRITICAL] [MemoryGuard] Memory limit exceeded (275MB >= 256MB) / (Recommend Over 256MB)
+2026-11-05 09:11:08,957 [CRITICAL] [MemoryGuard] Self-terminating process 285 to prevent system instability.

@@ -1,0 +1,29 @@
+case        : deadlock
+label       : before-mt-true
+settings    : MEMORY_LIMIT=512MB CPU_MAX_OCCUPY=100% MULTI_THREAD_ENABLE=true
+start       : 2026-11-05 09:41:22
+end         : 2026-11-05 09:41:56
+survival_s  : 33.6
+end_reason  : EXITED by itself (exit code 143) = signal 15 (TERM)
+peak_rss_mb : 19.9
+peak_cpu_pct: 4.8   (순간값, 코어 6개 기준 최대 600%)
+
+---- key log lines ----
+42:2026-11-05 09:41:56,318 [CRITICAL] [CpuWorker] CPU Threshold Violated! (54.230000000000004%).
+
+---- last 15 lines of app.log ----
+==================================================
+
+2026-11-05 09:41:25,019 [INFO] [CpuWorker] Started. Maximum CPU Limit: 100%
+2026-11-05 09:41:25,019 [INFO] [CpuWorker] Current Load: 5.00%
+2026-11-05 09:41:28,138 [INFO] [CpuWorker] Current Load: 6.73%
+2026-11-05 09:41:31,256 [INFO] [CpuWorker] Current Load: 10.80%
+2026-11-05 09:41:34,375 [INFO] [CpuWorker] Current Load: 14.93%
+2026-11-05 09:41:37,495 [INFO] [CpuWorker] Current Load: 24.05%
+2026-11-05 09:41:40,615 [INFO] [CpuWorker] Current Load: 31.31%
+2026-11-05 09:41:43,735 [INFO] [CpuWorker] Current Load: 32.51%
+2026-11-05 09:41:46,856 [INFO] [CpuWorker] Current Load: 35.46%
+2026-11-05 09:41:49,977 [INFO] [CpuWorker] Current Load: 42.92%
+2026-11-05 09:41:53,096 [INFO] [CpuWorker] Current Load: 47.07%
+2026-11-05 09:41:56,216 [INFO] [CpuWorker] Current Load: 54.23%
+2026-11-05 09:41:56,318 [CRITICAL] [CpuWorker] CPU Threshold Violated! (54.230000000000004%).

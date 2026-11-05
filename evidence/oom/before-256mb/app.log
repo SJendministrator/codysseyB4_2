@@ -1,0 +1,42 @@
+>>> Starting Agent Boot Sequence...
+[1/6] Checking User Account               [OK]
+   ... Running as service user 'agent' (uid=1000)
+[2/6] Verifying Environment Variables     [OK]
+   ... All required Envs correct
+[3/6] Checking Required Files             [OK]
+   ... Verified 'secret.key' with correct key string.
+[4/6] Checking Port Availability          [OK]
+   ... Port 15034 is available.
+[5/6] Verifying Log Permission            [OK]
+   ... Log directory is writable: /home/agent/agent_home/logs
+[6/6] Verifying Mission Environment       [OK]
+   ... MEMORY_LIMIT=256MB, CPU_MAX_OCCUPY=50%, MULTI_THREAD_ENABLE=True
+------------------------------------------------------------
+All Boot Checks Passed!
+Agent READY
+2026-11-05 09:10:36,389 [INFO] [SafetyGuard] Process priority lowered (nice=10).
+2026-11-05 09:10:36,389 [INFO] Agent listening at port 15034
+
+==================================================
+ [ Agent Initiate ] Resource Check 
+==================================================
+ [ MEMORY ] Limit: 256MB 		[ WARNING: Recommend Over 256MB ]
+ [ CPU    ] Limit: 50%  		[ OK ]
+ [ THREAD ] Concurrency: True 		[ WARNING ]
+--------------------------------------------------
+ >>> SYSTEM WARNING: POTENTIAL DEADLOCK IN CONCURRENT MODE.
+==================================================
+
+2026-11-05 09:10:38,439 [INFO] [MemoryWorker] Current Heap: 25MB
+2026-11-05 09:10:41,496 [INFO] [MemoryWorker] Current Heap: 50MB
+2026-11-05 09:10:44,550 [INFO] [MemoryWorker] Current Heap: 75MB
+2026-11-05 09:10:47,603 [INFO] [MemoryWorker] Current Heap: 100MB
+2026-11-05 09:10:50,658 [INFO] [MemoryWorker] Current Heap: 125MB
+2026-11-05 09:10:53,712 [INFO] [MemoryWorker] Current Heap: 150MB
+2026-11-05 09:10:56,766 [INFO] [MemoryWorker] Current Heap: 175MB
+2026-11-05 09:10:59,821 [INFO] [MemoryWorker] Current Heap: 200MB
+2026-11-05 09:11:02,877 [INFO] [MemoryWorker] Current Heap: 225MB
+2026-11-05 09:11:05,932 [INFO] [MemoryWorker] Current Heap: 250MB
+2026-11-05 09:11:08,956 [INFO] [MemoryWorker] Current Heap: 275MB
+2026-11-05 09:11:08,957 [CRITICAL] [MemoryGuard] Memory limit exceeded (275MB >= 256MB) / (Recommend Over 256MB)
+2026-11-05 09:11:08,957 [CRITICAL] [MemoryGuard] Self-terminating process 285 to prevent system instability.

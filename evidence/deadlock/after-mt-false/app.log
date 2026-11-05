@@ -1,0 +1,43 @@
+>>> Starting Agent Boot Sequence...
+[1/6] Checking User Account               [OK]
+   ... Running as service user 'agent' (uid=1000)
+[2/6] Verifying Environment Variables     [OK]
+   ... All required Envs correct
+[3/6] Checking Required Files             [OK]
+   ... Verified 'secret.key' with correct key string.
+[4/6] Checking Port Availability          [OK]
+   ... Port 15034 is available.
+[5/6] Verifying Log Permission            [OK]
+   ... Log directory is writable: /home/agent/agent_home/logs
+[6/6] Verifying Mission Environment       [OK]
+   ... MEMORY_LIMIT=512MB, CPU_MAX_OCCUPY=100%, MULTI_THREAD_ENABLE=False
+------------------------------------------------------------
+All Boot Checks Passed!
+Agent READY
+2026-11-05 09:43:55,557 [INFO] [SafetyGuard] Process priority lowered (nice=10).
+2026-11-05 09:43:55,557 [INFO] Agent listening at port 15034
+
+==================================================
+ [ Agent Initiate ] Resource Check 
+==================================================
+ [ MEMORY ] Limit: 512MB 		[ OK ]
+ [ CPU    ] Limit: 100%  		[ WARNING: Recommend Under 50% ]
+ [ THREAD ] Concurrency: False 		[ OK ]
+--------------------------------------------------
+ >>> SYSTEM STATUS: STABLE. STARTING WORKLOAD MONITORING...
+==================================================
+
+2026-11-05 09:43:57,568 [INFO] [CpuWorker] Started. Maximum CPU Limit: 100%
+2026-11-05 09:43:57,569 [INFO] [CpuWorker] Current Load: 5.00%
+2026-11-05 09:44:00,686 [INFO] [CpuWorker] Current Load: 7.81%
+2026-11-05 09:44:03,803 [INFO] [CpuWorker] Current Load: 11.78%
+2026-11-05 09:44:06,922 [INFO] [CpuWorker] Current Load: 20.75%
+2026-11-05 09:44:10,043 [INFO] [CpuWorker] Current Load: 22.07%
+2026-11-05 09:44:13,161 [INFO] [CpuWorker] Current Load: 28.97%
+2026-11-05 09:44:16,279 [INFO] [CpuWorker] Current Load: 31.13%
+2026-11-05 09:44:19,400 [INFO] [CpuWorker] Current Load: 31.69%
+2026-11-05 09:44:22,521 [INFO] [CpuWorker] Current Load: 34.74%
+2026-11-05 09:44:25,643 [INFO] [CpuWorker] Current Load: 40.30%
+2026-11-05 09:44:28,763 [INFO] [CpuWorker] Current Load: 41.16%
+2026-11-05 09:44:31,885 [INFO] [CpuWorker] Current Load: 50.30%
+2026-11-05 09:44:31,987 [CRITICAL] [CpuWorker] CPU Threshold Violated! (50.3%).
