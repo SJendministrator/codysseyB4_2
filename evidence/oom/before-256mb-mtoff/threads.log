@@ -1,0 +1,35 @@
+### 2026-11-05 10:28:43 (elapsed 1.0s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  62523   62523 S+   10.0 do_wait                  agent-leak-app-
+  62529   62529 SN+   5.0 do_select                agent-leak-app-
+
+### 2026-11-05 10:28:48 (elapsed 6.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  62523   62523 S+    1.4 do_wait                  agent-leak-app-
+  62529   62529 SN+   1.8 do_select                agent-leak-app-
+
+### 2026-11-05 10:28:54 (elapsed 11.5s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  62523   62523 S+    0.8 do_wait                  agent-leak-app-
+  62529   62529 SN+   1.7 do_select                agent-leak-app-
+
+### 2026-11-05 10:28:59 (elapsed 16.8s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  62523   62523 S+    0.5 do_wait                  agent-leak-app-
+  62529   62529 SN+   1.4 do_select                agent-leak-app-
+
+### 2026-11-05 10:29:04 (elapsed 22.1s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  62523   62523 S+    0.4 do_wait                  agent-leak-app-
+  62529   62529 SN+   1.4 do_select                agent-leak-app-
+
+### 2026-11-05 10:29:09 (elapsed 27.3s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  62523   62523 S+    0.3 do_wait                  agent-leak-app-
+  62529   62529 SN+   1.2 do_select                agent-leak-app-
+
+### 2026-11-05 10:29:15 (elapsed 32.6s)
+    PID     LWP STAT %CPU WCHAN                    COMMAND
+  62523   62523 S+    0.3 do_wait                  agent-leak-app-
+  62529   62529 SN+   1.0 do_select                agent-leak-app-
+
