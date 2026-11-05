@@ -2,10 +2,12 @@
 
 | 항목 | 내용 |
 |---|---|
-| 심각도 | High — 실행 33초 만에 서비스 중단, 같은 조건에서 매번 재현 |
+| 심각도 | High — 실행 33초 만에 서비스 중단, 2회 실행 2회 재현 (생존 시간 동일) |
 | 환경 | Ubuntu 22.04 컨테이너 (OrbStack, linux/amd64, 6 core, 16GB), 실행 계정 `agent`(uid 1000) |
-| 재현 조건 | `MEMORY_LIMIT=256 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=true` |
-| 증거 | [`evidence/oom/before-256mb/`](../evidence/oom/before-256mb/) · 비교 [`evidence/cpu/after-30/`](../evidence/cpu/after-30/) |
+| 재현 조건 | `MEMORY_LIMIT=256 CPU_MAX_OCCUPY=50` (`MULTI_THREAD_ENABLE` true/false 무관) |
+| 증거 | Before [`oom/before-256mb-mtoff/`](../evidence/oom/before-256mb-mtoff/) · 재현 [`oom/before-256mb/`](../evidence/oom/before-256mb/) · After [`deadlock/after-mt-false/`](../evidence/deadlock/after-mt-false/) |
+
+> §1~§2의 로그 발췌는 첫 실행(`oom/before-256mb`)에서 가져왔습니다. 두 번째 실행(`before-256mb-mtoff`)은 시각·PID만 다르고 증가 속도·종료 시점·로그 내용이 같습니다 (§2-3 표).
 
 ## 1. Description (현상 설명)
 
@@ -39,7 +41,7 @@
 
 ![OOM Before & After](../evidence/oom/compare.png)
 
-> 파랑: 256MB 실행 — 한도(파란 점선)를 넘자마자 ✕ 종료 / 주황: 512MB 실행 — 같은 속도로 늘다가 525MB에서 정리 후 0부터 다시 증가
+> 파랑·주황: 256MB 실행 2회 — 거의 겹친 채 한도(갈색 점선)를 넘자마자 ✕ 종료 / 초록: 512MB 실행 — 같은 속도로 늘다가 525MB에서 정리 후 다시 증가 (톱니 모양)
 
 ### 2-2. 프로그램 실행 로그 (종료 직전)
 
@@ -66,6 +68,15 @@ peak_rss_mb : 269.8
 - 종료 코드 137 = 128 + 9 → **SIGKILL**. 정리 기회를 주는 SIGTERM이 아니라 즉시 강제 종료
 - 로그의 `process 285`는 관제가 잡은 자식 PID와 일치 → 부모(279, PyInstaller 압축 해제 프로세스)가 아니라 **앱 본체가 자기 자신을 종료**
 
+**재현성 (2회 실행)**
+
+| 실행 | MULTI_THREAD | 시작 → 종료 (UTC) | PID (부모/본체) | 생존 | 최대 RSS | 마지막 Heap | 종료 |
+|---|---|---|---|---|---|---|---|
+| `before-256mb` | true | 09:10:36 → 09:11:08 | 279 / 285 | 33.6초 | 269.8MB | 275MB | SIGKILL (137) |
+| `before-256mb-mtoff` | false | 10:28:42 → 10:29:15 | 62523 / 62529 | 33.6초 | 270.0MB | 275MB | SIGKILL (137) |
+
+스레드 설정을 바꿔도 결과가 완전히 같다 → 메모리 한도가 256 이하이면 앱은 다른 설정과 무관하게 누수 시나리오를 고른다.
+
 ## 3. Root Cause Analysis (원인 분석)
 
 ### 증거 → 원인
@@ -87,9 +98,9 @@ peak_rss_mb : 269.8
 
 ```bash
 # Before
-MEMORY_LIMIT=256 ./scripts/monitor.sh oom before-256mb
-# After
-MEMORY_LIMIT=512 ./scripts/monitor.sh ...
+MEMORY_LIMIT=256 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=false ./scripts/monitor.sh oom before-256mb-mtoff
+# After (MEMORY_LIMIT만 변경)
+MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=false ./scripts/monitor.sh deadlock after-mt-false 600
 ```
 
 ### Before & After
@@ -97,16 +108,16 @@ MEMORY_LIMIT=512 ./scripts/monitor.sh ...
 | 항목 | Before (256MB) | After (512MB) |
 |---|---|---|
 | 앱 판단 | `WARNING: Recommend Over 256MB` → 누수 시나리오 | `[ OK ]` → 정상 모드 |
-| 생존 시간 | **33.6초** | **900초 이상** (관제 타임아웃까지 생존) |
+| 생존 시간 | **33.6초** | **600초 이상** (관제 타임아웃 600초까지 생존) |
 | 한도 도달 시 동작 | `MemoryGuard` 자체 종료 (SIGKILL) | `Memory Usage Reached Limit (525MB). Starting cleanup...` → `MEMORY RECOVERED (Cache Cleared)` |
-| 한도 도달 횟수 | 1회 (즉시 종료) | 13회 (약 66초 주기로 정리 후 회복) |
+| 한도 도달 횟수 | 1회 (즉시 종료) | 9회 (약 66초 주기로 정리 후 회복) |
 | 누수 속도 | 25MB / 3.05초 | 25MB / 3.05초 (동일) |
 
-> After 데이터는 `evidence/cpu/after-30` (MEM 512 · CPU 30 · MT false)에서 가져왔습니다. Before와 CPU·스레드 설정이 다르지만, 앱은 메모리 판단을 다른 설정보다 먼저 하므로(README의 시나리오 우선순위 참고) 메모리 동작 비교에는 영향이 없습니다. 메모리 한도만 다르게 맞춘 재측정(`oom/before-256mb-mtoff` ↔ `deadlock/after-mt-false`)을 추가할 예정입니다.
+> Before와 After는 `MEMORY_LIMIT`만 다르고 나머지 설정(CPU 50, 스레드 false)은 같습니다. 같은 512MB에서 CPU만 30으로 둔 15분 실행(`cpu/after-30`)도 13회 정리 후 생존해 같은 결과입니다.
 
 ### 해석
 
-- **누수 속도는 그대로이고 한도와 대응 방식만 바뀌었다.** 512MB에서는 한도 도달 시 프로세스를 죽이는 대신 캐시를 비우는 경로로 가서 살아남았지만, Heap은 다시 0부터 같은 속도로 쌓인다(그래프 주황선의 톱니 모양).
+- **누수 속도는 그대로이고 한도와 대응 방식만 바뀌었다.** 512MB에서는 한도 도달 시 프로세스를 죽이는 대신 캐시를 비우는 경로로 가서 살아남았지만, Heap은 다시 0부터 같은 속도로 쌓인다(그래프 초록선의 톱니 모양).
 - 따라서 이 조치는 **증상을 늦춘 임시 조치**다. 누수 속도가 일정하므로 생존 시간 ≈ (한도 − 초기 사용량) ÷ 누수 속도로 예측할 수 있다: 256MB → (256 − 0) ÷ 8.2 ≈ 31초 예상, 실측 33.6초.
 - 실서비스라면 정리(flush) 순간 캐시가 비면서 응답 지연이나 데이터 유실이 생길 수 있고, 메모리 512MB를 항상 예약해야 하므로 비용도 커진다.
 

@@ -23,8 +23,8 @@
 | 09:40:17 | `cpu/before-100` (`cpu/after-100`) | 512 / 100 / false | CPU 과점유 | 33.6s | SIGTERM (143), Load 52.33% |
 | 09:41:22 | `cpu/repeat-100-mt-true` (`deadlock/before-mt-true`) | 512 / 100 / true | CPU 과점유 | 33.6s | SIGTERM (143), Load 54.23% |
 | 09:43:55 | `cpu/repeat-100-mt-false` (`deadlock/after-mt-false`) | 512 / 100 / false | CPU 과점유 | 36.8s | SIGTERM (143), Load 50.3% |
-| 예정 | `oom/before-256mb-mtoff` | 256 / 50 / false | (메모리 누수 예상) | | |
-| 예정 | `deadlock/after-mt-false` | 512 / 50 / false | (Healthy 예상) | | |
+| 10:28:42 | `oom/before-256mb-mtoff` | 256 / 50 / false | 메모리 누수 | 33.6s | SIGKILL (137), MemoryGuard — 첫 실행과 동일 |
+| 10:37:02 | `deadlock/after-mt-false` | 512 / 50 / false | Healthy | 601.2s | 타임아웃까지 생존, 무응답 0회, Load 50.00%에서 cooldown 10회 |
 
 ## 막혔던 점 / 해결
 
@@ -40,3 +40,4 @@
 | `metrics.csv` 뒤쪽 컬럼이 한 칸씩 밀림 | 앱이 PID 2개(PyInstaller 부모/자식)로 떠서 `2099,2105`의 쉼표가 CSV 구분자와 충돌 | PID 구분자를 `;`로 변경, 기존 CSV는 컬럼 수 기준으로 복구 (값은 그대로) |
 | CPU 장애인데 OS가 잰 CPU는 2% 미만, 살아남은 실행이 오히려 더 높음 | Watchdog이 OS 측정값이 아니라 **앱 내부 Load 지표**로 판단 | 리포트에 앱 지표와 OS 측정값을 나란히 기록하고 차이를 명시 |
 | 데드락 중 RSS가 72초 시점에 19.6 → 12.5MB로 한 번 감소 | 같은 시점 `top`의 SHR이 9.4 → 2.2MB로 감소 — 커널이 쓰이지 않는 공유 라이브러리 페이지를 RAM에서 내림 | 앱 활동이 아님을 확인, "정체" 판단 유지 |
+| 재실행 시 `이미 존재하는 결과 폴더` 에러 | ① 맥에서 `git pull` 전이라 옛 폴더가 남아 있었음 ② pull 후에도 **빈 `snapshots/` 폴더**가 남음 — git은 빈 폴더를 추적하지 않아 이동·삭제하지 못함 | `git pull` 후 `ls -a`로 남은 게 빈 폴더뿐인지 확인하고 `rm -rf` |

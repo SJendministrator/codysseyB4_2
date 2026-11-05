@@ -2,9 +2,9 @@
 
 | 항목 | 내용 |
 |---|---|
-| 데이터 | [`evidence/cpu/after-30/app.log`](../evidence/cpu/after-30/app.log) — 모든 설정이 정상일 때 앱이 고르는 `Healthy System Monitoring` 모드 |
-| 실행 조건 | `MEMORY_LIMIT=512 CPU_MAX_OCCUPY=30 MULTI_THREAD_ENABLE=false` |
-| 결론 | **비선점(Non-preemptive) Priority 스케줄링**으로 추론 (표본 1회, 아래 한계 참고) |
+| 데이터 | 정상 모드(`Healthy System Monitoring`) 실행 2회 — [`cpu/after-30/app.log`](../evidence/cpu/after-30/app.log), [`deadlock/after-mt-false/app.log`](../evidence/deadlock/after-mt-false/app.log) |
+| 실행 조건 | `MEMORY_LIMIT=512 MULTI_THREAD_ENABLE=false`, `CPU_MAX_OCCUPY` 30 / 50 |
+| 결론 | **비선점(Non-preemptive) Priority 스케줄링**으로 추론 (표본 2회 모두 같은 순서) |
 
 ## 1. 로그 관찰 개요
 
@@ -36,7 +36,20 @@
 09:24:38,741 [INFO] [Scheduler] All tasks completed.
 ```
 
-### 타이밍 정리
+두 번째 실행(`deadlock/after-mt-false`, 1시간 12분 뒤 별도 프로세스)도 **같은 순서, 같은 간격**이었다.
+
+```
+10:37:04,356 [Scheduler] Registered Tasks: ['Thread-A', 'Thread-B', 'Thread-C']
+10:37:04,356 [Thread-B] Task Started. Calculating... (20%)
+10:37:04,561 [Thread-B] Task Completed. (100%)
+10:37:04,612 [Thread-C] Task Started. Calculating... (20%)
+10:37:04,817 [Thread-C] Task Completed. (100%)
+10:37:04,868 [Thread-A] Task Started. Calculating... (20%)
+10:37:05,074 [Thread-A] Task Completed. (100%)
+10:37:05,125 [Scheduler] All tasks completed.
+```
+
+### 타이밍 정리 (첫 번째 실행)
 
 | 작업 | 시작 | 완료 | 소요 | 실행 중 다른 작업 끼어듦 |
 |---|---|---|---|---|
@@ -47,6 +60,7 @@
 - 진행률 한 단계 간격: 약 51~52ms로 일정
 - 작업 간 전환 간격: 약 51ms (완료 → 다음 작업 시작)
 - 세 작업의 길이가 사실상 같음 (206~207ms)
+- 두 번째 실행: B 205ms → C 205ms → A 206ms, 전환 간격 51ms — 첫 실행과 같음
 
 ## 3. 패턴 분석
 
@@ -66,7 +80,8 @@
 
 ### 한계
 
-- 900초 실행 동안 스케줄러 블록은 **부팅 직후 1회**만 찍혀 표본이 하나다. 여러 번 실행해서 순서가 매번 B → C → A로 같다면 고정 우선순위, 매번 다르다면 무작위 선택일 가능성도 있다. 추가 실행 로그로 확인할 예정이다.
+- 스케줄러 블록은 실행마다 **부팅 직후 1회**만 찍힌다. 서로 다른 프로세스 2회에서 순서가 모두 B → C → A였으므로 무작위 선택보다는 **고정된 우선순위**일 가능성이 높다. 다만 표본이 2개라 "항상"이라고 단정하지는 않는다 (무작위라면 같은 순서가 두 번 나올 확률은 1/6).
+- 우선순위 값 자체는 로그에 나오지 않아, B > C > A는 **실행 순서로부터 추론한 것**이다.
 - 이것은 **앱 내부 작업 스케줄러**의 동작이다. OS 수준 스케줄링(CFS)과는 별개이며, 앱이 프로세스 자체를 `nice=10`으로 낮춘 것은 OS 수준 우선순위 조정이다.
 
 ## 4. 결론 — 장단점과 적합한 서비스

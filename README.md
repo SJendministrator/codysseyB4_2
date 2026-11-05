@@ -11,12 +11,12 @@
 
 | 장애 | 리포트 | Before | After | 핵심 증거 |
 |---|---|---|---|---|
-| **OOM** | [oom-report.md](docs/oom-report.md) | `MEMORY_LIMIT=256` → **33.6초** 만에 강제 종료 (SIGKILL, exit 137) | `MEMORY_LIMIT=512` → **15분 이상 생존**, 한도 도달 시 캐시 비우고 회복 (13회) ⏳ 동일 조건 재측정 예정 | Heap 25MB/3초 선형 증가, `[MemoryGuard] Memory limit exceeded (275MB >= 256MB)` |
-| **CPU** | [cpu-report.md](docs/cpu-report.md) | `CPU_MAX_OCCUPY=100` → **33.6초** 만에 종료 (SIGTERM, exit 143), 3회 재현 | `CPU_MAX_OCCUPY=30` → **15분 이상 생존**, 30%에서 자체 cooldown (25회) | 앱 Load 5% → 52% 단조 증가 후 약 50%에서 종료, `[CpuWorker] CPU Threshold Violated! (52.33%)` |
-| **Deadlock** | [deadlock-report.md](docs/deadlock-report.md) | `MULTI_THREAD_ENABLE=true` → PID 살아있으나 로그 정지, CPU 0%, 91초 무응답 | `MULTI_THREAD_ENABLE=false` → ⏳ 추가 실행 예정 | 워커 스레드 2개 모두 `futex_wait`, `WAITING for [Socket_Pool_B] / [Shared_Memory_A] (BLOCKED)` |
+| **OOM** | [oom-report.md](docs/oom-report.md) | `MEMORY_LIMIT=256` → **33.6초** 만에 강제 종료 (SIGKILL, exit 137), 2회 재현 | `MEMORY_LIMIT=512` → **600초 타임아웃까지 생존**, 525MB 도달 시 캐시 비우고 회복 (9회) | Heap 25MB/3초 선형 증가, `[MemoryGuard] Memory limit exceeded (275MB >= 256MB)` |
+| **CPU** | [cpu-report.md](docs/cpu-report.md) | `CPU_MAX_OCCUPY=100` → **33.6초** 만에 종료 (SIGTERM, exit 143), 3회 재현 | `CPU_MAX_OCCUPY=30` → **900초 타임아웃까지 생존**, 30%에서 자체 cooldown (25회). 경계값 50도 생존 | 앱 Load 5% → 52% 단조 증가 후 약 50%에서 종료, `[CpuWorker] CPU Threshold Violated! (52.33%)` |
+| **Deadlock** | [deadlock-report.md](docs/deadlock-report.md) | `MULTI_THREAD_ENABLE=true` → PID 살아있으나 로그 정지, CPU 0%, 91초 무응답 | `MULTI_THREAD_ENABLE=false` → **600초 타임아웃까지 생존**, 로그 공백 최대 2초, 무응답 감지 0회 | 워커 스레드 2개 모두 `futex_wait`, `WAITING for [Socket_Pool_B] / [Shared_Memory_A] (BLOCKED)` |
 | 보너스 | [scheduling-analysis.md](docs/scheduling-analysis.md) | 등록 A→B→C, 실행 B→C→A, 각 작업이 100% 끝난 뒤 다음 작업 시작 | | **비선점 Priority** 스케줄링으로 추론 |
 
-> ⏳ 두 칸은 "비교 대상과 변수 하나만 다른" 재측정을 추가할 예정입니다 ([evidence/README.md](evidence/README.md#추가-실행-예정)). 현재 OOM After는 같은 메모리 한도의 정상 모드 실행(`cpu/after-30`)으로 비교했습니다.
+> 세 비교 모두 **Before와 After 사이에 환경변수 하나만** 다릅니다 ([비교 쌍](evidence/README.md#폴더--실행-조건)).
 
 ### 실행하면서 알아낸 앱의 동작: "시나리오 선택기"
 
@@ -24,14 +24,14 @@
 
 | 우선순위 | 조건 | 선택되는 시나리오 | 확인한 실행 |
 |---|---|---|---|
-| 1 | `MEMORY_LIMIT` ≤ 256 (부팅 시 `WARNING: Recommend Over 256MB`) | 메모리 누수 → MemoryGuard 종료 | MEM 256 |
+| 1 | `MEMORY_LIMIT` ≤ 256 (부팅 시 `WARNING: Recommend Over 256MB`) | 메모리 누수 → MemoryGuard 종료 | MEM 256 (2회, 스레드 true/false 무관) |
 | 2 | `CPU_MAX_OCCUPY` > 50 (`WARNING: Recommend Under 50%`) | CPU 과점유 → Watchdog 종료 | CPU 100 (3회, 스레드 true여도 CPU가 우선) |
 | 3 | `MULTI_THREAD_ENABLE=true` (`POTENTIAL DEADLOCK`) | 데드락 | MEM 512 + CPU 50 + MT true |
-| - | 모두 정상 | `Healthy System Monitoring` (안정 동작 + 스케줄러 로그) | MEM 512 + CPU 30 + MT false |
+| - | 모두 정상 | `Healthy System Monitoring` (안정 동작 + 스케줄러 로그) | MEM 512 + CPU 30 또는 50 + MT false |
 
 그래서 **한 장애를 관찰할 때는 더 높은 우선순위 장애를 꺼두고, 비교할 변수 하나만 바꾸는 방식**으로 실험을 다시 설계했고, 처음 실행한 결과는 **실제로 재현된 장애 기준으로 폴더를 재분류**했습니다 (매핑: [evidence/README.md](evidence/README.md)).
 
-또 하나: `CPU_MAX_OCCUPY`는 Watchdog 기준이 아니라 **작업이 스스로 멈추는 상한**이었습니다. 그래서 **낮출수록(30) 살아남고 높이면(100) 죽습니다** — 처음 예상과 반대였습니다 ([cpu-report §3](docs/cpu-report.md#3-root-cause-analysis-원인-분석)).
+또 하나: `CPU_MAX_OCCUPY`는 Watchdog 기준이 아니라 **작업이 스스로 멈추는 상한**이었습니다. Watchdog은 앱 Load가 **50%를 초과**할 때 발동하므로, 상한을 **30·50으로 두면 살아남고 100으로 두면 죽습니다** — 처음 예상과 반대였습니다 ([cpu-report §3](docs/cpu-report.md#3-root-cause-analysis-원인-분석)).
 
 ---
 

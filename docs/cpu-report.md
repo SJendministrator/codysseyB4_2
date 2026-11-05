@@ -1,4 +1,4 @@
-# [Bug] CPU Latency - CpuWorker 부하가 상한 없이 증가해 Watchdog(약 50%)에 의해 SIGTERM 종료
+# [Bug] CPU Latency - CpuWorker 부하가 상한 없이 증가해 Watchdog(50% 초과)에 의해 SIGTERM 종료
 
 | 항목 | 내용 |
 |---|---|
@@ -38,7 +38,16 @@
 [repeat-100-mt-false] 2026-11-05 09:44:31,987 [CRITICAL] [CpuWorker] CPU Threshold Violated! (50.3%).
 ```
 
-→ 세 번 모두 **50%를 처음 넘은 직후** 종료. `CPU_MAX_OCCUPY=100`으로 줬는데도 50%에서 끊겼으므로, 종료 기준은 설정값이 아니라 **앱에 고정된 약 50% 임계치**(부팅 경고 `Recommend Under 50%`와 일치)다.
+→ 세 번 모두 **50%를 처음 넘은 직후** 종료. `CPU_MAX_OCCUPY=100`으로 줬는데도 50%에서 끊겼으므로, 종료 기준은 설정값이 아니라 **앱에 고정된 50% 임계치**(부팅 경고 `Recommend Under 50%`와 일치)다.
+
+**경계값 확인**: `CPU_MAX_OCCUPY=50`으로 600초 실행한 [`deadlock/after-mt-false`](../evidence/deadlock/after-mt-false/)에서는 Load가 정확히 50.00%에 닿으면 멈추고 식히기를 10회 반복했고, `Threshold Violated`는 한 번도 나오지 않았다.
+
+```
+2026-11-05 10:37:32,165 [INFO] [CpuWorker] Peak reached (50.00%). Starting cooldown...
+2026-11-05 10:38:34,506 [INFO] [CpuWorker] Peak reached (50.00%). Starting cooldown...
+```
+
+→ Watchdog은 **50%를 "초과"할 때** 발동한다. 50.00%까지는 허용되고, 52.33% · 54.23% · 50.3%는 종료됐다.
 
 ### 2-2. 종료 형태 (`summary.txt`)
 
@@ -86,7 +95,7 @@ end_reason  : EXITED by itself (exit code 143) = signal 15 (TERM)
 ### 증거 → 원인
 
 1. **Load가 3초마다 단조 증가하고 내려오지 않음** → CpuWorker가 작업량을 계속 늘리기만 하는 구조. `CPU_MAX_OCCUPY=100`이 "최대 100%까지 올려도 된다"는 상한으로 쓰여, 사실상 **브레이크가 없는 상태**
-2. **약 50%를 넘는 순간 SIGTERM** (3회 모두) → 앱 내부 Watchdog의 고정 임계치. 설정 상한(100)이 Watchdog 임계치(50)보다 높아 **반드시 Watchdog에 걸리는 설정 충돌**
+2. **50%를 넘는 순간 SIGTERM** (3회 모두, 50.00% 정확히는 허용) → 앱 내부 Watchdog의 고정 임계치. 설정 상한(100)이 Watchdog 임계치(50)보다 높아 **반드시 Watchdog에 걸리는 설정 충돌**
 3. **After(30%)에서는 Load가 30%에 닿으면 `Peak reached (30.00%). Starting cooldown...` → 5%까지 내려간 뒤 다시 증가** → `CPU_MAX_OCCUPY`는 Watchdog 기준이 아니라 **작업이 스스로 멈추는 상한(throttle)** 이라는 것이 확인됨
 
 정리하면: 상한(`CPU_MAX_OCCUPY`)을 Watchdog 임계치(50%)보다 높게 주면 부하가 임계치를 뚫고 올라가 강제 종료되고, 임계치보다 낮게 주면 작업이 먼저 스스로 식혀서 살아남는다.
@@ -119,6 +128,8 @@ MEMORY_LIMIT=512 MULTI_THREAD_ENABLE=false CPU_MAX_OCCUPY=30  ./scripts/monitor.
 | 상한 도달 횟수 | - | 25회 (약 35초 주기) |
 | 생존 시간 | **33.6초** (재현 33.6 / 36.8초) | **900초 이상** (관제 타임아웃까지 생존) |
 | 종료 사유 | SIGTERM (exit 143) | 관제가 정상 종료 |
+
+참고로 경계값 `CPU_MAX_OCCUPY=50`도 600초 동안 생존했다(Load 50.00%에서 cooldown 10회, 위반 0회). 실측한 세 값(30·50 생존, 100 종료)과 "Load가 50%를 넘는 순간 종료"라는 로그를 합치면, **상한을 50 이하로 두는 것**이 안전한 설정이다 (51~99 사이 값은 실행해보지 않았다).
 
 ### 해석
 

@@ -29,7 +29,7 @@ EVIDENCE = ROOT / "evidence"
 FIGURES = {
     "oom": dict(
         title="OOM - MEMORY_LIMIT 256MB vs 512MB",
-        runs=["oom/before-256mb", "oom/before-256mb-mtoff", "deadlock/after-mt-false", "cpu/after-30"],
+        runs=["oom/before-256mb-mtoff", "oom/before-256mb", "deadlock/after-mt-false"],
         panels=[("rss_mb", "Process RSS (MB)"), ("app:heap", "App-reported Heap (MB)")],
         limit_env="MEMORY_LIMIT", limit_panel=0, xmax=120,
     ),

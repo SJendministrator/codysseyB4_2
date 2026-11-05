@@ -5,7 +5,7 @@
 | 심각도 | Critical — 프로세스·포트는 살아 있어 "정상"처럼 보이지만 작업은 영원히 멈춤. 에러 로그 없음 |
 | 환경 | Ubuntu 22.04 컨테이너 (OrbStack, linux/amd64, 6 core, 16GB), 실행 계정 `agent`(uid 1000) |
 | 재현 조건 | `MULTI_THREAD_ENABLE=true` (메모리 `512`, CPU `50`으로 다른 장애는 배제) |
-| 증거 | [`evidence/deadlock/before-mt-true/`](../evidence/deadlock/before-mt-true/) (스냅샷: [`snapshots/`](../evidence/deadlock/before-mt-true/snapshots/)) |
+| 증거 | Before [`deadlock/before-mt-true/`](../evidence/deadlock/before-mt-true/) (스냅샷: [`snapshots/`](../evidence/deadlock/before-mt-true/snapshots/)) · After [`deadlock/after-mt-false/`](../evidence/deadlock/after-mt-false/) |
 
 ## 1. Description (현상 설명)
 
@@ -42,9 +42,9 @@ agent-leak-app-(2099)---agent-leak-app-(2105)-+-{agent-leak-app-}(2452)
 
 ![Deadlock](../evidence/deadlock/compare.png)
 
-- 위: 마지막 로그 이후 경과 시간이 **직선으로 계속 증가** (로그 완전 정지)
-- 가운데: 프로세스 CPU **100초 내내 0.0%** (무한 루프였다면 높게 나왔을 것)
-- 아래: RSS 증가 없음. 72초 시점의 1회 감소(19.6 → 12.5MB)는 같은 시각 `top`의 SHR(공유 메모리)이 9.4 → 2.2MB로 줄어든 것과 크기가 같다 → 앱 작업이 아니라 **커널이 쓰이지 않는 공유 라이브러리 페이지를 RAM에서 내린 것**
+- 위: 파랑(Before)은 마지막 로그 이후 경과 시간이 **직선으로 계속 증가** (로그 완전 정지). 주황(After)은 0~2초에 머묾
+- 가운데: Before는 프로세스 CPU **100초 내내 0.0%** (무한 루프였다면 높게 나왔을 것). After는 수 % 단위로 계속 오르내림
+- 아래: Before는 RSS 증가 없음 (After는 정상 모드의 메모리 워커가 돌아 톱니 모양). 72초 시점의 1회 감소(19.6 → 12.5MB)는 같은 시각 `top`의 SHR(공유 메모리)이 9.4 → 2.2MB로 줄어든 것과 크기가 같다 → 앱 작업이 아니라 **커널이 쓰이지 않는 공유 라이브러리 페이지를 RAM에서 내린 것**
 
 ### 2-3. 스레드 상태 (`ps -L`, `top -H`) — 60초 간격 두 스냅샷
 
@@ -156,12 +156,25 @@ MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=false ./scripts/monitor.s
 
 | 항목 | Before (`true`) | After (`false`) |
 |---|---|---|
-| 부팅 판단 | `Concurrency: True [ WARNING ]` `POTENTIAL DEADLOCK` | ⏳ 재측정 예정 |
-| 워커 스레드 | 2개 생성 → 2초 뒤 모두 `futex_wait` | ⏳ |
-| 로그 진행 | 09:19:49 이후 정지 | ⏳ |
-| 결과 | `HUNG` (91초 무응답, 관제가 종료) | ⏳ |
+| 부팅 판단 | `Concurrency: True [ WARNING ]` `POTENTIAL DEADLOCK` | `Concurrency: False [ OK ]` → `Healthy System Monitoring` |
+| 락 경쟁 로그 | `LOCK ACQUIRED` ×2 → `WAITING … BLOCKED` ×2 | 없음 (트랜잭션 워커 자체가 생성되지 않음) |
+| 스레드 상태 | 워커 2개 모두 `futex_wait`, `TIME+` 0:00.00 고정 | 워커 2개 `do_select`(작업 사이 정상 대기), %CPU 0.8~0.9 — 실제로 일하고 있음 |
+| 로그 진행 | 09:19:49 이후 정지 | 600초 내내 진행, 로그 공백 최대 **2초** |
+| CPU / 메모리 | 0% / 변화 없음 | 평균 1.8% / 25MB씩 증가 후 525MB에서 정리 (9회) |
+| 무응답 감지 | 31초 만에 `STALL DETECTED` | **0회** |
+| 결과 | `HUNG` (91초 무응답, 관제가 종료) | `SURVIVED` (600초 타임아웃까지 정상 동작) |
 
-> 참고: 스레드만 끄고 CPU 상한을 30으로 둔 실행([`cpu/after-30`](../evidence/cpu/after-30/), `Concurrency: False [ OK ]`)에서는 데드락 없이 `Healthy System Monitoring` 모드로 **900초 동안 로그가 계속 진행**됐다 (로그 공백 최대 2초, 무응답 감지 0회). Before와 스레드 설정 하나만 다른 실행으로 이 표를 채울 예정이다.
+After 실행이 끝날 때 찍은 스레드 스냅샷 (`deadlock/after-mt-false/snapshots/104703-timeout.txt`):
+
+```
+    PID     LWP STAT %CPU %MEM WCHAN                    COMMAND
+  64380   64380 S+    0.0  0.0 do_wait                  agent-leak-app-
+  64386   64386 SNl+  0.0  1.0 futex_wait               agent-leak-app-   ← 메인: 워커를 기다리는 정상 대기
+  64386   64503 SNl+  0.9  1.0 do_select                agent-leak-app-   ← 워커: 일하고 쉬기를 반복
+  64386   64504 SNl+  0.8  1.0 do_select                agent-leak-app-
+```
+
+Before와 같은 `S` 상태라도 **무엇을 기다리는지(WCHAN)와 CPU 시간이 쌓이는지**가 다르다. Before의 워커는 락(`futex`)에서 CPU를 한 번도 못 쓰고 멈춰 있었고, After의 워커는 `select`로 잠깐 쉬었다 일하기를 반복하며 CPU를 조금씩 쓰고 있다. "잠들어 있다"만으로는 데드락이라 할 수 없고, **락 대기 + 진행 없음**이 함께 확인돼야 한다.
 
 ### 해석
 
