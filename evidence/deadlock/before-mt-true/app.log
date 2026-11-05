@@ -10,33 +10,33 @@
 [5/6] Verifying Log Permission            [OK]
    ... Log directory is writable: /home/agent/agent_home/logs
 [6/6] Verifying Mission Environment       [OK]
-   ... MEMORY_LIMIT=512MB, CPU_MAX_OCCUPY=100%, MULTI_THREAD_ENABLE=True
+   ... MEMORY_LIMIT=512MB, CPU_MAX_OCCUPY=50%, MULTI_THREAD_ENABLE=True
 ------------------------------------------------------------
 All Boot Checks Passed!
 Agent READY
-2026-11-05 09:41:23,008 [INFO] [SafetyGuard] Process priority lowered (nice=10).
-2026-11-05 09:41:23,008 [INFO] Agent listening at port 15034
+2026-11-05 09:19:40,393 [INFO] [SafetyGuard] Process priority lowered (nice=10).
+2026-11-05 09:19:40,394 [INFO] Agent listening at port 15034
 
 ==================================================
  [ Agent Initiate ] Resource Check 
 ==================================================
  [ MEMORY ] Limit: 512MB 		[ OK ]
- [ CPU    ] Limit: 100%  		[ WARNING: Recommend Under 50% ]
+ [ CPU    ] Limit: 50%  		[ OK ]
  [ THREAD ] Concurrency: True 		[ WARNING ]
 --------------------------------------------------
  >>> SYSTEM WARNING: POTENTIAL DEADLOCK IN CONCURRENT MODE.
 ==================================================
 
-2026-11-05 09:41:25,019 [INFO] [CpuWorker] Started. Maximum CPU Limit: 100%
-2026-11-05 09:41:25,019 [INFO] [CpuWorker] Current Load: 5.00%
-2026-11-05 09:41:28,138 [INFO] [CpuWorker] Current Load: 6.73%
-2026-11-05 09:41:31,256 [INFO] [CpuWorker] Current Load: 10.80%
-2026-11-05 09:41:34,375 [INFO] [CpuWorker] Current Load: 14.93%
-2026-11-05 09:41:37,495 [INFO] [CpuWorker] Current Load: 24.05%
-2026-11-05 09:41:40,615 [INFO] [CpuWorker] Current Load: 31.31%
-2026-11-05 09:41:43,735 [INFO] [CpuWorker] Current Load: 32.51%
-2026-11-05 09:41:46,856 [INFO] [CpuWorker] Current Load: 35.46%
-2026-11-05 09:41:49,977 [INFO] [CpuWorker] Current Load: 42.92%
-2026-11-05 09:41:53,096 [INFO] [CpuWorker] Current Load: 47.07%
-2026-11-05 09:41:56,216 [INFO] [CpuWorker] Current Load: 54.23%
-2026-11-05 09:41:56,318 [CRITICAL] [CpuWorker] CPU Threshold Violated! (54.230000000000004%).
+2026-11-05 09:19:42,405 [WARNING] [AgentWorker] Initializing concurrent transaction processors...
+2026-11-05 09:19:42,406 [WARNING] [System] CAUTION: Strict resource locking is enabled.
+2026-11-05 09:19:47,433 [INFO] [Worker-Thread-1] Process Started. Attempting to lock [Shared_Memory_A]...
+2026-11-05 09:19:47,433 [INFO] [AgentWorker][Worker-Thread-1] LOCK ACQUIRED: [Shared_Memory_A]. (Holding...)
+2026-11-05 09:19:47,434 [INFO] [AgentWorker][Worker-Thread-2] Process Started. Attempting to lock [Socket_Pool_B]...
+2026-11-05 09:19:47,434 [INFO] [AgentWorker][Worker-Thread-1] Processing critical data in Memory A...
+2026-11-05 09:19:47,434 [INFO] [AgentWorker] Waiting for worker threads to complete transactions...
+2026-11-05 09:19:47,435 [INFO] [AgentWorker][Worker-Thread-2] LOCK ACQUIRED: [Socket_Pool_B]. (Holding...)
+2026-11-05 09:19:47,435 [INFO] [AgentWorker][Worker-Thread-2] Establishing network connections in Pool B...
+2026-11-05 09:19:49,447 [INFO] [AgentWorker][Worker-Thread-1] Need resource [Socket_Pool_B] to finish job.
+2026-11-05 09:19:49,447 [INFO] [AgentWorker][Worker-Thread-1] WAITING for [Socket_Pool_B]... (Status: BLOCKED)
+2026-11-05 09:19:49,447 [INFO] [AgentWorker][Worker-Thread-2] Need resource [Shared_Memory_A] to write logs.
+2026-11-05 09:19:49,448 [INFO] [AgentWorker][Worker-Thread-2] WAITING for [Shared_Memory_A]... (Status: BLOCKED)

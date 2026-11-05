@@ -12,9 +12,11 @@
 | 장애 | 리포트 | Before | After | 핵심 증거 |
 |---|---|---|---|---|
 | **OOM** | [oom-report.md](docs/oom-report.md) | `MEMORY_LIMIT=256` → **33.6초** 만에 강제 종료 (SIGKILL, exit 137) | `MEMORY_LIMIT=512` → **15분 이상 생존**, 한도 도달 시 캐시 비우고 회복 (13회) ⏳ 동일 조건 재측정 예정 | Heap 25MB/3초 선형 증가, `[MemoryGuard] Memory limit exceeded (275MB >= 256MB)` |
-| **CPU** | [cpu-report.md](docs/cpu-report.md) | `CPU_MAX_OCCUPY=100` → **33.6초** 만에 종료 (SIGTERM, exit 143), 3회 재현 | `CPU_MAX_OCCUPY=30` → **15분 이상 생존**, 30%에서 자체 cooldown (25회) | Load 5% → 52% 단조 증가, `[CpuWorker] CPU Threshold Violated! (52.33%)` |
-| **Deadlock** | [deadlock-report.md](docs/deadlock-report.md) | `MULTI_THREAD_ENABLE=true` → PID 살아있으나 로그 정지, CPU 0%, 90초 무응답 | `MULTI_THREAD_ENABLE=false` → ⏳ 추가 실행 예정 | 스레드 2개 모두 `futex_wait`, `WAITING for [Socket_Pool_B] / [Shared_Memory_A] (BLOCKED)` |
+| **CPU** | [cpu-report.md](docs/cpu-report.md) | `CPU_MAX_OCCUPY=100` → **33.6초** 만에 종료 (SIGTERM, exit 143), 3회 재현 | `CPU_MAX_OCCUPY=30` → **15분 이상 생존**, 30%에서 자체 cooldown (25회) | 앱 Load 5% → 52% 단조 증가 후 약 50%에서 종료, `[CpuWorker] CPU Threshold Violated! (52.33%)` |
+| **Deadlock** | [deadlock-report.md](docs/deadlock-report.md) | `MULTI_THREAD_ENABLE=true` → PID 살아있으나 로그 정지, CPU 0%, 91초 무응답 | `MULTI_THREAD_ENABLE=false` → ⏳ 추가 실행 예정 | 워커 스레드 2개 모두 `futex_wait`, `WAITING for [Socket_Pool_B] / [Shared_Memory_A] (BLOCKED)` |
 | 보너스 | [scheduling-analysis.md](docs/scheduling-analysis.md) | 등록 A→B→C, 실행 B→C→A, 각 작업이 100% 끝난 뒤 다음 작업 시작 | | **비선점 Priority** 스케줄링으로 추론 |
+
+> ⏳ 두 칸은 "비교 대상과 변수 하나만 다른" 재측정을 추가할 예정입니다 ([evidence/README.md](evidence/README.md#추가-실행-예정)). 현재 OOM After는 같은 메모리 한도의 정상 모드 실행(`cpu/after-30`)으로 비교했습니다.
 
 ### 실행하면서 알아낸 앱의 동작: "시나리오 선택기"
 
@@ -23,11 +25,13 @@
 | 우선순위 | 조건 | 선택되는 시나리오 | 확인한 실행 |
 |---|---|---|---|
 | 1 | `MEMORY_LIMIT` ≤ 256 (부팅 시 `WARNING: Recommend Over 256MB`) | 메모리 누수 → MemoryGuard 종료 | MEM 256 |
-| 2 | `CPU_MAX_OCCUPY` > 50 (`WARNING: Recommend Under 50%`) | CPU 과점유 → Watchdog 종료 | CPU 100 (3회) |
+| 2 | `CPU_MAX_OCCUPY` > 50 (`WARNING: Recommend Under 50%`) | CPU 과점유 → Watchdog 종료 | CPU 100 (3회, 스레드 true여도 CPU가 우선) |
 | 3 | `MULTI_THREAD_ENABLE=true` (`POTENTIAL DEADLOCK`) | 데드락 | MEM 512 + CPU 50 + MT true |
 | - | 모두 정상 | `Healthy System Monitoring` (안정 동작 + 스케줄러 로그) | MEM 512 + CPU 30 + MT false |
 
-그래서 **한 장애를 관찰할 때는 더 높은 우선순위 장애를 꺼두고, 비교할 변수 하나만 바꾸는 방식**으로 실험을 설계했습니다 (아래 [4. 실행 방법](#4-실행-방법) 참고).
+그래서 **한 장애를 관찰할 때는 더 높은 우선순위 장애를 꺼두고, 비교할 변수 하나만 바꾸는 방식**으로 실험을 다시 설계했고, 처음 실행한 결과는 **실제로 재현된 장애 기준으로 폴더를 재분류**했습니다 (매핑: [evidence/README.md](evidence/README.md)).
+
+또 하나: `CPU_MAX_OCCUPY`는 Watchdog 기준이 아니라 **작업이 스스로 멈추는 상한**이었습니다. 그래서 **낮출수록(30) 살아남고 높이면(100) 죽습니다** — 처음 예상과 반대였습니다 ([cpu-report §3](docs/cpu-report.md#3-root-cause-analysis-원인-분석)).
 
 ---
 
@@ -35,11 +39,11 @@
 
 | 평가 항목 | 확인 위치 |
 |---|---|
-| [OOM] 메모리가 선형 증가하다 강제 종료되는 패턴 | [oom-report §2](docs/oom-report.md), `evidence/oom/` 의 `metrics.csv`·`app.log` |
+| [OOM] 메모리가 선형 증가하다 강제 종료되는 패턴 | [oom-report §2](docs/oom-report.md), [`evidence/oom/before-256mb/`](evidence/oom/before-256mb/) |
 | [OOM] `MEMORY_LIMIT` Before & After | [oom-report §4](docs/oom-report.md), `evidence/oom/compare.png` |
-| [CPU] 임계치 초과 후 종료 패턴 | [cpu-report §2](docs/cpu-report.md) |
+| [CPU] 임계치 초과 후 종료 패턴 | [cpu-report §2](docs/cpu-report.md), [`evidence/cpu/before-100/`](evidence/cpu/before-100/) + 재현 2회 |
 | [CPU] `CPU_MAX_OCCUPY` Before & After | [cpu-report §4](docs/cpu-report.md), `evidence/cpu/compare.png` |
-| [Deadlock] PID 존재 + CPU/MEM 무변화 + 로그 정지 식별 | [deadlock-report §2](docs/deadlock-report.md), `snapshots/*stall-detected.txt` |
+| [Deadlock] PID 존재 + CPU/MEM 무변화 + 로그 정지 식별 | [deadlock-report §2](docs/deadlock-report.md), [`evidence/deadlock/before-mt-true/snapshots/`](evidence/deadlock/before-mt-true/snapshots/) |
 | [Deadlock] `MULTI_THREAD_ENABLE` 재현/회피 비교 | [deadlock-report §4](docs/deadlock-report.md) |
 | [Format] 3건 모두 현상 → 증거 → 원인 → 조치 구조 | 각 리포트 §1 ~ §4 |
 | [Evidence] PID, 타임스탬프, 핵심 로그 포함 | 각 리포트 §2 (로그 발췌), 각 실행 폴더의 `monitor.log`·`summary.txt` |
@@ -55,6 +59,8 @@ scripts/
   setup_env.sh   앱 부트 조건(계정·디렉터리·secret.key·환경변수 범위·포트) 준비 + 사전 검증
   monitor.sh     앱 실행 + 1초 단위 관제. 종료 / 무응답 / 타임아웃까지 자동 기록
   plot.py        케이스별 Before & After 비교 그래프
+evidence/README.md   실행별 조건·결과 표, 폴더 재분류 매핑
+evidence/<case>/compare.png   Before & After 그래프
 evidence/<case>/<label>/
   metrics.csv    수치 (RSS, 순간 CPU, ps CPU, 시스템 CPU, 스레드 수, 로그 무변화 시간 …)
   monitor.log    사람이 읽는 관제 로그 (PID 포함)
@@ -100,22 +106,26 @@ cd /workspace && export APP_BIN=/workspace/agent-leak-app-x86
 
 ### 케이스별 실행 (형식: `변수=값 ./scripts/monitor.sh <case> <label> [timeout초]`)
 
-```bash
-# OOM — 메모리 한도만 비교 (CPU·스레드는 정상값으로 고정)
-MEMORY_LIMIT=256 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=false ./scripts/monitor.sh oom before-256mb
-MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=false ./scripts/monitor.sh oom after-512mb 600
+시나리오 우선순위를 고려해, 관찰하려는 장애보다 우선순위가 높은 장애는 정상값으로 고정하고 **변수 하나만** 바꿉니다.
 
-# CPU — 메모리 정상, 데드락 끔, CPU 상한만 비교
+```bash
+# OOM — 메모리 한도만 비교
+MEMORY_LIMIT=256 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=false ./scripts/monitor.sh oom before-256mb-mtoff
+#   After는 아래 deadlock/after-mt-false 실행을 공유 (512 / 50 / false)
+
+# CPU — 메모리 정상, 스레드 끔, CPU 상한만 비교
 MEMORY_LIMIT=512 MULTI_THREAD_ENABLE=false CPU_MAX_OCCUPY=100 ./scripts/monitor.sh cpu before-100
 MEMORY_LIMIT=512 MULTI_THREAD_ENABLE=false CPU_MAX_OCCUPY=30  ./scripts/monitor.sh cpu after-30
 
 # Deadlock — 메모리·CPU 정상, 멀티스레드만 비교
 MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=true  ./scripts/monitor.sh deadlock before-mt-true 300
-MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=false ./scripts/monitor.sh deadlock after-mt-false 300
+MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=false ./scripts/monitor.sh deadlock after-mt-false 600
 
-# 그래프 (matplotlib 필요)
-python3 scripts/plot.py all
+# 그래프 (matplotlib 필요. 맥이나 다른 환경에서 실행해도 됨)
+python3 scripts/plot.py
 ```
+
+이미 실행한 결과와 실행 당시 이름은 [evidence/README.md](evidence/README.md)에 정리돼 있습니다.
 
 `monitor.sh`는 다음 중 하나가 되면 스스로 끝나고 `summary.txt`에 사유를 남깁니다.
 
@@ -148,7 +158,17 @@ python3 scripts/plot.py all
 | `top -H -b -n 1 -p PID` | `-H` 스레드 단위, `-b` 배치(파일 저장용), `-n 1` 1회, `-p` 특정 PID만 | 종료·무응답 시점 스냅샷 |
 | `/proc/stat`, `/proc/loadavg` | 시스템 전체 CPU, load average | "시스템 전체 부하"인지 "특정 프로세스"인지 구분 |
 
-실측으로 차이가 드러났습니다 (CPU 100 실행): 순간 CPU는 **0% → 4.8%로 꾸준히 상승**하는데 `ps` 값은 **7.5% → 1.3%로 오히려 하락**. 시스템 전체 CPU는 1~2%로 평탄 → 장애가 시스템 전반이 아니라 이 프로세스에서 시작됐다는 근거입니다.
+실측으로 차이가 드러났습니다 (CPU 100 실행, [그래프](evidence/cpu/compare.png)):
+
+| 구간 | 앱 Load | 순간 CPU (10초 평균) | `ps %CPU` |
+|---|---|---|---|
+| 0~10초 | 5% → 7% | 0.31% | 7.5% → 2.0% |
+| 10~20초 | 14% → 24% | 0.53% | 1.5% → 1.2% |
+| 20~34초 | 34% → 52% | **1.32%** | 1.2% → 1.3% |
+
+- 순간값은 앱 Load와 **같은 방향으로 4배 증가**했지만, `ps`는 기동 비용이 희석되며 **계속 떨어지기만** 해서 증가를 전혀 보여주지 못했습니다. `ps`만 봤다면 "CPU 문제 아님"으로 오판했을 것입니다.
+- 시스템 전체 CPU는 1~2%로 평탄 → 서버 전체가 아니라 **이 프로세스 내부 문제**입니다.
+- 절대값은 작습니다(코어 1개의 2% 미만). 오히려 살아남은 30% 실행이 OS 기준 CPU를 더 썼습니다. 즉 이 앱의 **Watchdog은 OS 측정값이 아니라 앱 내부 Load 지표로 판단**합니다. 관제 도구가 보는 값과 앱이 판단하는 값이 다를 수 있다는 점을 리포트에 함께 기록했습니다.
 
 ### Q. "살아있지만 멈춘" 프로세스는 어떤 순서로 진단했나?
 
@@ -191,7 +211,7 @@ python3 scripts/plot.py all
 09:19:47.435 [Worker-Thread-2] LOCK ACQUIRED: [Socket_Pool_B]     ← 2가 B 보유
 09:19:49.447 [Worker-Thread-1] WAITING for [Socket_Pool_B] (BLOCKED)   ← 1이 B 대기 (B는 2가 보유)
 09:19:49.448 [Worker-Thread-2] WAITING for [Shared_Memory_A] (BLOCKED) ← 2가 A 대기 (A는 1이 보유)
-— 이후 로그 없음. 30초 뒤 STALL 감지, 90초 무응답 확인 —
+— 이후 로그 없음. 31초 뒤 STALL 감지, 총 91초 무응답 확인 —
 ```
 
 두 `WAITING`이 1ms 차이로 찍힌 뒤 해제(RELEASED) 로그가 영원히 나오지 않았고, 같은 시점 `ps -L`에서 스레드 2개(LWP 2452, 2453)가 모두 `futex_wait`였습니다. **로그(애플리케이션 시점)와 커널 상태(OS 시점)가 같은 결론**을 가리키므로 순환 대기로 판단했습니다.
@@ -231,7 +251,7 @@ python3 scripts/plot.py all
 
 ### Q. 처음부터 다시 한다면 무엇을 다르게 하겠나?
 
-- **실행 전에 부팅 로그부터 읽기**: `Resource Check`의 WARNING 문구가 이미 시나리오 선택 조건을 알려주고 있었는데, 처음엔 세 장애가 동시에 일어난다고 가정해 6번 중 3번이 의도와 다른 장애를 재현했습니다.
+- **실행 전에 부팅 로그부터 읽기**: `Resource Check`의 WARNING 문구(`Recommend Over 256MB`, `Recommend Under 50%`)가 이미 시나리오 선택 조건과 "안전한 방향"을 알려주고 있었습니다. 이를 무시하고 세 장애가 동시에 일어난다고 가정해 6번 중 3번이 의도와 다른 장애를 재현했고, CPU는 Before/After를 반대로 잡았습니다.
 - **한 번에 변수 하나만 바꾸기**: Before와 After 사이에 변수가 둘 이상 다르면 "무엇 때문에 달라졌는지" 말할 수 없습니다.
 - **관제 도구부터 검증**: 가짜 앱으로 스크립트를 먼저 시험했지만, 실제 앱이 PID 2개로 뜨는 것까지는 예상하지 못해 CSV 칸이 밀리는 버그가 생겼습니다. 실제 대상으로 짧게 한 번 돌려보고 시작했어야 했습니다.
 - **`ps %CPU`를 믿지 않기**: 누적 평균이라 스파이크를 놓칩니다. 처음부터 순간값을 계산했습니다.
